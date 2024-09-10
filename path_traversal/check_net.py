@@ -2,7 +2,7 @@ import requests
 import subprocess
 def net(d_name):
     #subprocess.call(['sudo','apt','install','figlet'])
-    subprocess.call(['figlet','etc / passwd'])
+    #subprocess.call(['figlet','etc / passwd'])
     print("\n")
     print("                                                     => BALAJI A    \n")
     print("checking Connection [!]......")
