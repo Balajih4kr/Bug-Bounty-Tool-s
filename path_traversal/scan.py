@@ -3,7 +3,7 @@ import requests
 import file
 
 def vuln_check(v_url):
-    file = open('s.txt','r')
+    file = open('payload.txt','r')
     read_result = file.readlines()
     
     
