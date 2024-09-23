@@ -6,7 +6,7 @@ TOOL_DIR="$3"
 
 
 
-
+sudo apt update
 if [ -d "$DIR_NAME" ]; then
   echo "[!] Directory $DIR_NAME already exists. Exiting."
   exit 1
