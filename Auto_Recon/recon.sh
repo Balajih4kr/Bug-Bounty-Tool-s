@@ -1,118 +1,120 @@
 #!/bin/bash
 
-DIR_NAME="$1"
-DOMAIN="$2"
-TOOL_DIR="$3"
-
-
-
-sudo apt update
-if [ -d "$DIR_NAME" ]; then
-  echo "[!] Directory $DIR_NAME already exists. Exiting."
-  exit 1
-else
-  echo "[+] Creating new Directory for Recon ==> $DIR_NAME"
-  mkdir "$DIR_NAME"
+# Check if figlet is installed
+if ! command -v figlet &> /dev/null; then
+    echo "[!] Figlet is not installed. Install it using: sudo apt install figlet"
+    exit 1
 fi
 
-# Amass for subdomain enumeration
-echo "[+] Running Amass for subdomain enumeration"
-amass enum -active -d "$DOMAIN" >> ~/"$DIR_NAME"/subdomain.txt
-echo "[+] Amass completed and output saved to ${DIR_NAME}/subdomain.txt"
+# Colors for figlet and output
+GREEN="\033[1;32m"
+CYAN="\033[1;36m"
+NC="\033[0m" # No Color
 
+# Display tool name in ASCII art with color
+echo -e "${CYAN}"
+figlet -c "BALAJIH4KR"
+echo -e "${GREEN}Recon Tool${NC}"
 
+# Colors for script output
+BLUE="\033[0;34m"
+RED="\033[0;31m"
 
-# Sublist3r for subdomain enumeration
-echo "[+] Running Sublist3r..."
-if [ -d "$TOOL_DIR/Sublist3r" ]; then
-    cd "$TOOL_DIR/Sublist3r"
-    python3 sublist3r.py -d "$DOMAIN" -t 30 -b -o ~/"$DIR_NAME"/subdomain.txt
-    cd -
-    echo "[+] Sublist3r completed."
-else
-    echo "[-] Sublist3r directory not found!"
+# Check if required tools are installed
+check_tool() {
+    if ! command -v "$1" &> /dev/null; then
+        echo -e "${RED}[!] $1 is not installed. Please install it before running this script.${NC}"
+        exit 1
+    fi
+}
+
+# Check if ParamSpider is installed
+check_paramspider() {
+    if [ ! -d "$HOME/tools/ParamSpider" ]; then
+        echo -e "${RED}[!] ParamSpider is not installed. Please install it using:${NC}"
+        echo -e "    git clone https://github.com/devanshbatham/ParamSpider.git"
+        echo -e "    cd ParamSpider && pip install -r requirements.txt"
+        exit 1
+    fi
+}
+
+# Ensure required tools are installed
+TOOLS=("amass" "sublist3r" "assetfinder" "findomain" "curl" "waybackurls" "gau" "httprobe" "whatweb" "nmap" "jq")
+for tool in "${TOOLS[@]}"; do
+    check_tool "$tool"
+done
+check_paramspider
+
+# Usage
+usage() {
+    echo -e "${GREEN}Usage: $0 -d <domain>${NC}"
+    exit 1
+}
+
+# Parse command-line options
+while getopts "d:" opt; do
+    case "$opt" in
+        d) DOMAIN=$OPTARG ;;
+        *) usage ;;
+    esac
+done
+
+if [ -z "$DOMAIN" ]; then
+    usage
 fi
 
-# Add Go binaries to PATH
-echo "[+] Adding Go binaries to PATH"
-export PATH=$PATH:$(go env GOPATH)/bin
-source ~/.bashrc
+# Create output directory
+OUTPUT_DIR="recon-$DOMAIN"
+mkdir -p "$OUTPUT_DIR"
+echo -e "${BLUE}[+] Output will be saved to $OUTPUT_DIR${NC}"
 
-# Assetfinder for subdomain enumeration
-echo "[+] Running Assetfinder..."
-assetfinder "$DOMAIN" >> ~/"$DIR_NAME"/subdomain.txt
-echo "[+] Assetfinder completed."
+# Reconnaissance steps
 
-# Findomain for subdomain enumeration
-echo "[+] Running Findomain..."
-if [ -d "$TOOL_DIR/findomain" ]; then
-    cd "$TOOL_DIR/findomain"
-    cargo build --release
-    sudo mv target/release/findomain /usr/bin/
-    findomain -t "$DOMAIN" >> ~/"$DIR_NAME"/subdomain.txt
-    cd -
-    echo "[+] Findomain completed."
-else
-    echo "[-] Findomain directory not found!"
-fi
+# 1. Amass
+echo -e "${GREEN}[+] Running Amass...${NC}"
+amass enum -passive -d "$DOMAIN" > "$OUTPUT_DIR/amass.txt"
 
-# Query crt.sh for certificates
-echo "[+] Querying crt.sh for certificates..."
-curl -s "https://crt.sh/?q=$DOMAIN&output=json" | jq -r '.[].name_value' >> ~/"$DIR_NAME"/subdomain.txt
-echo "[+] crt.sh results saved."
+# 2.sublister
+sublist3r -d "$DOMAIN" --exclude DNSdumpster,Virustotal > "$DOMAIN/sublister.txt"
 
-# DNSenum for DNS enumeration
-echo "[+] Running DNSenum..."
-dnsenum --enum "$DOMAIN" -o ~/"$DIR_NAME"/dnsenum.xml
-echo "[+] DNSenum completed."
+# 3. Assetfinder
+echo -e "${GREEN}[+] Running Assetfinder...${NC}"
+assetfinder --subs-only "$DOMAIN" > "$OUTPUT_DIR/assetfinder.txt"
 
-# DNScan for DNS-based discovery
-echo "[+] Running DNScan..."
-if [ -d "$TOOL_DIR/dnscan" ]; then
-    cd "$TOOL_DIR/dnscan"
-    python3 dnscan.py -d "$DOMAIN" -o ~/"$DIR_NAME"/dnscan.txt
-    cd -
-    echo "[+] DNScan completed."
-else
-    echo "[-] DNScan directory not found!"
-fi
+# 4. Findomain
+echo -e "${GREEN}[+] Running Findomain...${NC}"
+findomain -t "$DOMAIN" -u "$OUTPUT_DIR/findomain.txt"
 
-# Nmap scan
-echo "[+] Running Nmap scan..."
-nmap "$DOMAIN" > ~/"$DIR_NAME"/nmap.txt
-echo "[+] Nmap scan completed."
+# 5. crt.sh
+echo -e "${GREEN}[+] Querying crt.sh...${NC}"
+curl -s "https://crt.sh/?q=%.$DOMAIN&output=json" | jq -r '.[].name_value' | sort -u > "$OUTPUT_DIR/crtsh.txt"
 
-# Waybackurls for extracting archived URLs
-echo "[+] Running Waybackurls..."
-echo "$DOMAIN" | waybackurls > ~/"$DIR_NAME"/urls.txt
-echo "[+] Waybackurls completed."
+# 6. Wayback URLs
+echo -e "${GREEN}[+] Fetching Wayback URLs...${NC}"
+echo "$DOMAIN" | waybackurls > "$OUTPUT_DIR/waybackurls.txt"
 
-# Running Dirsearch for directory brute-forcing
-echo "[+] Running Dirsearch..."
-if [ -d "$TOOL_DIR/dirsearch" ]; then
-    cd "$TOOL_DIR/dirsearch"
-    python3 dirsearch.py -u "$DOMAIN" -e php,html,js -o ~/"$DIR_NAME"/dirsearch.txt
-    cd -
-    echo "[+] Dirsearch completed."
-else
-    echo "[-] Dirsearch directory not found!"
-fi
+# 7. gau (Get All URLs)
+echo -e "${GREEN}[+] Running gau...${NC}"
+echo "$DOMAIN" | gau > "$OUTPUT_DIR/gau.txt"
 
-# Running Gobuster for directory enumeration
-echo "[+] Running Gobuster..."
-gobuster dir -u "$DOMAIN" -w /usr/share/wordlists/dirb/common.txt -o ~/"$DIR_NAME"/gobuster.txt
-echo "[+] Gobuster completed."
+# 8. ParamSpider
+echo -e "${GREEN}[+] Running ParamSpider...${NC}"
+"$HOME/tools/ParamSpider/paramspider" -d "$DOMAIN" -o "$OUTPUT_DIR/paramspider.txt"
 
-# Running EyeWitness for screenshots
-echo "[+] Running EyeWitness..."
-if [ -d "$TOOL_DIR/EyeWitness/Python" ]; then
-    cd "$TOOL_DIR/EyeWitness/Python"
-    ./setup/setup.sh
-    python3 EyeWitness.py --web -f ~/"$DIR_NAME"/urls.txt -d ~/"$DIR_NAME"/scr/
-    cd -
-    echo "[+] EyeWitness completed."
-else
-    echo "[-] EyeWitness directory not found!"
-fi
+# 9. httprobe
+echo -e "${GREEN}[+] Probing for live domains...${NC}"
+cat "$OUTPUT_DIR/amass.txt" "$OUTPUT_DIR/sublister.txt" "$OUTPUT_DIR/assetfinder.txt" "$OUTPUT_DIR/findomain.txt" | sort -u | httprobe > "$OUTPUT_DIR/live_domains.txt"
 
-echo "[+] Recon automation completed."
+# 10. WhatWeb
+echo -e "${GREEN}[+] Running WhatWeb...${NC}"
+while read -r domain; do
+    whatweb "$domain" >> "$OUTPUT_DIR/whatweb.txt"
+done < "$OUTPUT_DIR/live_domains.txt"
+
+
+# 12. Final Results Compilation
+echo -e "${GREEN}[+] Compiling results...${NC}"
+cat "$OUTPUT_DIR/"*.txt | sort -u > "$OUTPUT_DIR/final_results.txt"
+
+# Done
+echo -e "${CYAN}[+] Recon complete! Results saved in $OUTPUT_DIR${NC}"
