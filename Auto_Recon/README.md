@@ -4,17 +4,17 @@
  domain using a set of specialized tools. The process involves various techniques such as
  subdomain enumeration, DNS probing, directory brute-forcing, and more. These methods assist in
  discovering potential attack surfaces for further security testing
- 
- 
+
+ <h3 align="center">Entire Recon process in One click</h3>
+ <h3 align="center">Saving Hunting Timing process by recon.sh</h3>
+
  
  
  ### Steps to install Auto Recon Tool :
-- sudo su
+- mkdir tools
 - git clone https://github.com/Balajih4kr/Bug-Bounty-Tool-s.git
-- cd ~
-- python3 setup.py
 - chmod +x recon.sh
-- ./recon.sh {your_dir_name} {target_domain}
+- ./recon.sh -d {your-doamin}
 
 <h1 align="Center">Happy Hacking 👋</h1>
 
