@@ -74,8 +74,6 @@ echo -e "${BLUE}[+] Output will be saved to $OUTPUT_DIR${NC}"
 echo -e "${GREEN}[+] Running Amass...${NC}"
 amass enum -passive -d "$DOMAIN" > "$OUTPUT_DIR/amass.txt"
 
-# 2.sublister
-sublist3r -d "$DOMAIN" --exclude DNSdumpster,Virustotal > "$DOMAIN/sublister.txt"
 
 # 3. Assetfinder
 echo -e "${GREEN}[+] Running Assetfinder...${NC}"
@@ -97,24 +95,26 @@ echo "$DOMAIN" | waybackurls > "$OUTPUT_DIR/waybackurls.txt"
 echo -e "${GREEN}[+] Running gau...${NC}"
 echo "$DOMAIN" | gau > "$OUTPUT_DIR/gau.txt"
 
-# 8. ParamSpider
-echo -e "${GREEN}[+] Running ParamSpider...${NC}"
-"$HOME/tools/ParamSpider/paramspider" -d "$DOMAIN" -o "$OUTPUT_DIR/paramspider.txt"
+# 8. Tools by BALAJIh4kr
+echo -e "${GREEN}[+] Running BALAJIh4kr...${NC}"
+cd "$HOME/tools/"
+python3 param_crawl.py "$DOMAIN" -o "$HOME/tools/$OUTPUT_DIR/raw_url.txt"
 
+# 8.1 =>
+
+echo -e "${GREEN}[+] Running BALAJIh4kr (sqli.txt)...${NC}"
+cd "$HOME/tools/"
+python3 value_rem.py "$HOME/tools/$OUTPUT_DIR/raw_url.txt" "$HOME/tools/$OUTPUT_DIR/sqli.txt"
+sort -u "$HOME/tools/$OUTPUT_DIR/sqli.txt" > "$HOME/tools/$OUTPUT_DIR/sql_injection.txt"
 # 9. httprobe
 echo -e "${GREEN}[+] Probing for live domains...${NC}"
-cat "$OUTPUT_DIR/amass.txt" "$OUTPUT_DIR/sublister.txt" "$OUTPUT_DIR/assetfinder.txt" "$OUTPUT_DIR/findomain.txt" | sort -u | httprobe > "$OUTPUT_DIR/live_domains.txt"
+cat "$HOME/tools/$OUTPUT_DIR/amass.txt" "$HOME/tools/$OUTPUT_DIR/assetfinder.txt" "$HOME/tools/$OUTPUT_DIR/findomain.txt" | sort -u | httprobe > "$HOME/tools/$OUTPUT_DIR/live_domains.txt"
 
 # 10. WhatWeb
 echo -e "${GREEN}[+] Running WhatWeb...${NC}"
 while read -r domain; do
-    whatweb "$domain" >> "$OUTPUT_DIR/whatweb.txt"
-done < "$OUTPUT_DIR/live_domains.txt"
-
-
-# 12. Final Results Compilation
-echo -e "${GREEN}[+] Compiling results...${NC}"
-cat "$OUTPUT_DIR/"*.txt | sort -u > "$OUTPUT_DIR/final_results.txt"
+    whatweb "$domain" >> "$HOME/tools/$OUTPUT_DIR/whatweb.txt"
+done < "$HOME/tools/$OUTPUT_DIR/live_domains.txt"
 
 # Done
 echo -e "${CYAN}[+] Recon complete! Results saved in $OUTPUT_DIR${NC}"
