@@ -6,7 +6,7 @@
  discovering potential attack surfaces for further security testing
 
  <h3 align="center">Entire Recon process in One click</h3>
- <h3 align="center">Saving Hunting Timing process by recon.sh</h3>
+ <h3 align="center">Save Your Time by recon.sh</h3>
 
  
  
