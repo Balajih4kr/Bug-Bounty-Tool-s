@@ -62,7 +62,7 @@ http://example.com/page1 🛑 Possible SQL Injection vulnerability found
 http://example.com/page2 🛑 Possible SQL Injection vulnerability found
 ✅ Payload => ' OR '1'='1
 ```
-![MySQL Injection Tool](images/Screenshot from 2024-12-10 13-40-32.png)
+![MySQL Injection Tool](images/tool2.png)
 
 
 ## 📝 Author
