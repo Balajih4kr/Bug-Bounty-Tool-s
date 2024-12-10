@@ -4,7 +4,7 @@
 
 # 💉 MySQL Injection Tool
 
-
+![MySQL Injection Tool](images/tool1.png)
 ## 📄 Overview
 The **MySQL Injection Tool** is a powerful and easy-to-use tool designed to automate the process of testing web applications for SQL injection vulnerabilities specifically targeting MySQL databases. Whether you're a security professional, penetration tester, or developer, this tool helps you quickly identify potential risks and vulnerabilities in web applications.
 
@@ -36,6 +36,7 @@ To install the MySQL Injection Tool:
 2. Ensure all prerequisites are met as mentioned in the prerequisites section.
 3. Place the list of target URLs in a file named `sqli.txt` in the root directory.
 4. Place the list of SQL injection payloads in a file named `SQL_payload.txt` in the root directory.
+
 
 
 3. The tool will output the results for each URL with its corresponding payload, indicating potential vulnerabilities.
