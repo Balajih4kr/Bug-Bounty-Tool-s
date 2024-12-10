@@ -1,10 +1,9 @@
-Sure! Here's a more visually appealing README file with emojis:
+
 
 ---
 
 # 💉 MySQL Injection Tool
 
-![MySQL Injection Tool](https://example.com/logo.png)
 
 ## 📄 Overview
 The **MySQL Injection Tool** is a powerful and easy-to-use tool designed to automate the process of testing web applications for SQL injection vulnerabilities specifically targeting MySQL databases. Whether you're a security professional, penetration tester, or developer, this tool helps you quickly identify potential risks and vulnerabilities in web applications.
