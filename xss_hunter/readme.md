@@ -17,8 +17,7 @@
 - **Automated XSS Detection**: Scans websites and input fields to find potential XSS vulnerabilities.
 - **Custom Payloads**: Includes a variety of XSS payloads to test forms and input fields.
 - **Filter Bypass**: Includes advanced payloads designed to bypass common XSS filters.
-- **Customizable**: Supports custom payloads and limit the number of payloads used in a scan.
-- **Form Action URL Extraction**: Extracts form action URLs from web pages and tests for XSS vulnerabilities.
+
 
 ---
 
